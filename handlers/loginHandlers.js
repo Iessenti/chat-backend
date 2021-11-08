@@ -25,7 +25,9 @@ router.post(
             })
 
             let smsCode = Math.floor(1000 + Math.random() * 9000)
-
+            
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             return res.status(200).send({message: smsCode.toString(10)})
         } )
     }
@@ -50,7 +52,8 @@ router.post(
                 currentAvatar: 0
             })
             fs.writeFile(dbPath, JSON.stringify(arr))
-
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             return res.status(201).send({message: "Пользователь загружен", id: id})
         })
 
@@ -81,7 +84,8 @@ router.post(
             })
 
             fs.writeFile(dbPath, JSON.stringify(newArr))
-
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             return res.status(201).send({message: "Данные пользователя обновлены", id: id})
         })
 
@@ -112,8 +116,12 @@ router.post(
             })
             if (state != 0) {
                 fs.writeFile(dbPath, JSON.stringify(newArr))
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
                 return res.send({message: "Введите код", sms: smsCode, person: person})
             } else {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
                 return res.send({message: "Такой пользователь не существует"})
             }
             
@@ -129,6 +137,8 @@ router.post(
     async (req, res) => {
 
         fs.readFile(dbPath, (err, data) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             res.send({body: data})
         })
 
