@@ -8,11 +8,13 @@ const io = require('socket.io')(server, {
     }
 })
 const fs = require('fs')
-
+const cors = require('cors')
 const messageHandlers = require('./handlers/messageHandlers')
 
 const dbPath = '../db/message.json'
-
+app.use(cors({
+    origin: '*'
+}));
 app.use('/api/', require('./handlers/loginHandlers'))
 
 const onConnection = (socket) => {
