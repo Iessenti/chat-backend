@@ -13,7 +13,7 @@ router.post(
     async (req, res) => {
 
         const { phone } = req.body
-
+        console.log(phone)
         fs.readFile(dbPath, (err, data) => {
 
             let arr = JSON.parse(data.body)
@@ -25,7 +25,7 @@ router.post(
             })
 
             let smsCode = Math.floor(1000 + Math.random() * 9000)
-            
+            console.log(smsCode)
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             return res.status(200).send({message: smsCode.toString(10)})
@@ -40,7 +40,7 @@ router.post(
 
         const { phone } = req.body
         const id = nanoid(12)
-
+        console.log('check')
         fs.readFile(dbPath, (err, data) => {
             let arr = JSON.parse(data.body)
             arr.push({
@@ -68,7 +68,7 @@ router.post(
     async (req, res) => {
 
         const { username, id, currentAvatar } = req.body
-
+        console.log(username+ '   ' + id)
         fs.readFile(dbPath, (err, data) => {
 
             let arr = JSON.parse(data.body)
