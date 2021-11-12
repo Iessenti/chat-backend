@@ -5,6 +5,7 @@ const jsonParser = express.json()
 const fs = require('fs')
 const { nanoid } = require('nanoid')
 
+cosnt path = require("path")
 const dbPath = '../db/users.json'
 
 router.post(
@@ -14,11 +15,11 @@ router.post(
 
         const { phone } = req.body
         console.log(phone)
-        fs.readFile(dbPath, (err, data) => {
+        fs.readFile(path.resolve(__dirname, dbPath), (err, data) => {
 
-            let arr = JSON.parse(data.body)
+            let arr = JSON.parse(data)
 
-            arr.forEach( elem => {
+            arr.body.forEach( elem => {
                 if (elem.phone === phone) {
                     return res.status(200).send({message: 'Пользователь существует'})
                 }
@@ -41,8 +42,9 @@ router.post(
         const { phone } = req.body
         const id = nanoid(12)
         console.log('check')
-        fs.readFile(dbPath, (err, data) => {
-            let arr = JSON.parse(data.body)
+        fs.readFile(path.resolve(__dirname, dbPath), (err, data) => {
+            let dat = JSON.parse(data)
+            let arr = dat.body
             arr.push({
                 id: id,
                 phone: phone,
@@ -51,7 +53,7 @@ router.post(
                 active: false,
                 currentAvatar: 0
             })
-            fs.writeFile(dbPath, JSON.stringify(arr))
+            fs.writeFile(path.resolve(__dirname, dbPath), JSON.stringify(arr))
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             return res.status(201).send({message: "Пользователь загружен", id: id})
@@ -69,7 +71,7 @@ router.post(
 
         const { username, id, currentAvatar } = req.body
         console.log(username+ '   ' + id)
-        fs.readFile(dbPath, (err, data) => {
+        fs.readFile(path.resolve(__dirname, dbPath), (err, data) => {
 
             let arr = JSON.parse(data.body)
 
@@ -83,7 +85,7 @@ router.post(
                 }
             })
 
-            fs.writeFile(dbPath, JSON.stringify(newArr))
+            fs.writeFile(path.resolve(__dirname, dbPath), JSON.stringify(newArr))
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             return res.status(201).send({message: "Данные пользователя обновлены", id: id})
@@ -103,7 +105,7 @@ router.post(
         const {phone} = req.body
         let smsCode = Math.floor(1000 + Math.random() * 9000)
 
-        fs.readFile(dbPath, (err,data) => {
+        fs.readFile(path.resolve(__dirname, dbPath), (err,data) => {
             let arr = JSON.parse(data.body)
             let person = 0
             let newArr = arr.map( elem => {
@@ -115,7 +117,7 @@ router.post(
                 }
             })
             if (state != 0) {
-                fs.writeFile(dbPath, JSON.stringify(newArr))
+                fs.writeFile(path.resolve(__dirname, dbPath), JSON.stringify(newArr))
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
                 return res.send({message: "Введите код", sms: smsCode, person: person})
@@ -136,7 +138,7 @@ router.post(
     jsonParser,
     async (req, res) => {
 
-        fs.readFile(dbPath, (err, data) => {
+        fs.readFile(path.resolve(__dirname, dbPath), (err, data) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             res.send({body: data})
