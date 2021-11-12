@@ -43,9 +43,9 @@ router.post(
         const id = nanoid(12)
         console.log('check')
         fs.readFile(path.resolve(__dirname, dbPath), (err, data) => {
-            let dat = JSON.parse(data)
-            let arr = dat.body
-            arr.push({
+            let arr = JSON.parse(data)
+            
+            arr.body.push({
                 id: id,
                 phone: phone,
                 username: '',
@@ -53,7 +53,7 @@ router.post(
                 active: false,
                 currentAvatar: 0
             })
-            fs.writeFile(path.resolve(__dirname, dbPath), JSON.stringify(arr))
+            fs.writeFile(path.resolve(__dirname, dbPath), JSON.stringify({body: arr.body}), () => {})
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             return res.status(201).send({message: "Пользователь загружен", id: id})
