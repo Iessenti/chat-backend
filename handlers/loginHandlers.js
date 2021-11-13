@@ -73,9 +73,9 @@ router.post(
         console.log(username+ '   ' + id)
         fs.readFile(path.resolve(__dirname, dbPath), (err, data) => {
 
-            let arr = JSON.parse(data.body)
+            let arr = JSON.parse(data)
 
-            const newArr = arr.map( elem => {
+            const newArr = arr.body.map( elem => {
                 if (elem.username === username) {
                     return res.send({message: "Пользователь с таким именем уже существует"})
                 } else if (elem.id === id) {
@@ -85,7 +85,7 @@ router.post(
                 }
             })
 
-            fs.writeFile(path.resolve(__dirname, dbPath), JSON.stringify(newArr))
+            fs.writeFile(path.resolve(__dirname, dbPath), JSON.stringify(newArr), () => {})
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
             return res.status(201).send({message: "Данные пользователя обновлены", id: id})
@@ -106,9 +106,9 @@ router.post(
         let smsCode = Math.floor(1000 + Math.random() * 9000)
 
         fs.readFile(path.resolve(__dirname, dbPath), (err,data) => {
-            let arr = JSON.parse(data.body)
+            let arr = JSON.parse(data)
             let person = 0
-            let newArr = arr.map( elem => {
+            let newArr = arr.body.map( elem => {
                 if (elem.phone === phone) {
                     person = elem
                     return {...elem, active: true}
@@ -139,9 +139,10 @@ router.post(
     async (req, res) => {
 
         fs.readFile(path.resolve(__dirname, dbPath), (err, data) => {
+            let arr = JSON.parse(data)
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
-            res.send({body: data})
+            res.send({body: arr})
         })
 
     }
